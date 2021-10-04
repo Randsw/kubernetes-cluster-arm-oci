@@ -22,6 +22,7 @@ variable "vcn_dns_label" {
 variable "vcn_cidrs" {
     type = list(string)
     description = "List of VCN CIDRs"
+    default = [ "172.19.0.0/16" ]
 }
 
 variable "freeform_tags" {
@@ -37,4 +38,16 @@ variable "label_prefix" {
 variable "internet_gateway_display_name" {
     type = string
     description = "Internet Gateway display name"
+}
+
+variable "security_list_name" {
+    type = string
+    description = "Subnet security list name"
+}
+
+
+variable k8s_subnet_cidr {
+    type = string
+    description = "Kubernetes Cluster subnet CIDR"
+    default = "172.19.0.0/24"
 }

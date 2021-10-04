@@ -12,4 +12,6 @@ freeform_tags = {
 
 label_prefix = "kube"
 
-internet_gateway_display_name = "Kube IG"
+internet_gateway_display_name = "internet-gateway"
+
+security_list_name = "security-list"
