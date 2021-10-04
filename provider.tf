@@ -1,5 +1,5 @@
 data "sops_file" "secret" {
-  source_file = "secret_k8sgi.sops.yaml"
+  source_file = "secret_k8s.sops.yaml"
 }
 
 provider "oci" {

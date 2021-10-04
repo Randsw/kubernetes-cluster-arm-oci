@@ -38,8 +38,3 @@ variable "internet_gateway_display_name" {
     type = string
     description = "Internet Gateway display name"
 }
-
-variable "internet_gateway_route_rules" {
-    type = list(map(string))
-    description = "Internet Gateway route rules"
-}
