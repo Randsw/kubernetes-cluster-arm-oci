@@ -12,16 +12,17 @@ terraform {
   required_providers {
     oci = {
         source  = "hashicorp/oci"
-        version = ">= 4.0.0"
+        version = ">= 4.41.0"
     }
     sops = {
       source  = "carlpett/sops"
       version = "~> 0.5"
     }
   }
+  required_version = ">= 1.0.0"
 }
 
-data "oci_identity_compartments" "vpn_compartments" {
+data "oci_identity_compartments" "kube_compartments" {
     compartment_id = data.sops_file.secret.data["tenancy"]
     access_level = "ACCESSIBLE"
     name = var.compartment_name
@@ -29,5 +30,5 @@ data "oci_identity_compartments" "vpn_compartments" {
 }
 
 data "oci_identity_availability_domains" "ads" {
-  compartment_id = data.oci_identity_compartments.vpn_compartments.compartments[0].id
+  compartment_id = data.oci_identity_compartments.kube_compartments.compartments[0].id
 }
