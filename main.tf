@@ -20,3 +20,14 @@ terraform {
     }
   }
 }
+
+data "oci_identity_compartments" "vpn_compartments" {
+    compartment_id = data.sops_file.secret.data["tenancy"]
+    access_level = "ACCESSIBLE"
+    name = var.compartment_name
+    state = var.compartment_state
+}
+
+data "oci_identity_availability_domains" "ads" {
+  compartment_id = data.oci_identity_compartments.vpn_compartments.compartments[0].id
+}
