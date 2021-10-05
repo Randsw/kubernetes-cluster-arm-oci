@@ -5,69 +5,76 @@ resource "oci_core_security_list" "k8s_security_list" {
     freeform_tags = var.freeform_tags
 
     ingress_security_rules {
-        protocol = "6"
-        source   = "0.0.0.0/0"
-        description = "Allow http connection"
+        protocol      = "6"
+        source        = var.k8s_subnet_cidr
+        description   = "Allow all tcp connection in subnet"
+     }
+
+    ingress_security_rules {
+        protocol      = "17"
+        source        = var.k8s_subnet_cidr
+        description   = "Allow all udp connection in subnet"
+     }
+
+    ingress_security_rules {
+        protocol      = "1"
+        source        = var.k8s_subnet_cidr
+        description   = "Allow ping from subnet"
+    }
+
+    ingress_security_rules {
+        protocol      = "6"
+        source        = "0.0.0.0/0"
+        description   = "Allow http connection"
         tcp_options {
             min = "80"
             max = "80"
         }
      }
 
-        ingress_security_rules {
-        protocol = "6"
-        source   = "0.0.0.0/0"
-        description = "Allow https connection"
-            tcp_options {
-                min = "443"
-                max = "443"
-            }
+    ingress_security_rules {
+        protocol      = "6"
+        source        = "0.0.0.0/0"
+        description   = "Allow https connection"
+        tcp_options {
+            min = "443"
+            max = "443"
         }
-
-    # ingress_security_rules {
-    #     protocol = "6"
-    #     source   = data.oci_core_subnets.public_subnets.subnets[0].cidr_block
-    #     description = "Allow connection to k8s api from public subnet through OpenVPN"
-    #     tcp_options {
-    #         min = "6443"
-    #         max = "6443"
-    #     }
-    #  }
+    }
 
     ingress_security_rules {
-        protocol = "17"
-        source   = "0.0.0.0/0"
-        description = "Allow ntp connection"
+        protocol      = "17"
+        source        = "0.0.0.0/0"
+        description   = "Allow ntp connection"
         tcp_options {
             min = "123"
             max = "123"
         }
      }
 
-    ingress_security_rules {
-        protocol = "4"
-        source   = var.k8s_subnet_cidr
-        description = "Allow IPIP connection"
-     }
-
-     egress_security_rules {
-        protocol = "6"
+    egress_security_rules {
+        protocol      = "6"
         destination   = "0.0.0.0/0"
-        description = "Allow output tcp connection"
+        description   = "Allow output tcp connection"
      }
+    egress_security_rules {
+        protocol      = "17"
+        destination   = var.k8s_subnet_cidr
+        description   = "Allow output udp connection in subnet"
+     }
+    egress_security_rules {
+        protocol      = "1"
+        source        = var.k8s_subnet_cidr
+        description   = "Allow ping from subnet"
+    }
 
     egress_security_rules {
-        protocol = "17"
+        protocol      = "17"
         destination   = "0.0.0.0/0"
-        description = "NTP egress"
+        description   = "NTP egress"
         udp_options {
             min = "123"
             max = "123"
         }
-     }
-    egress_security_rules {
-        protocol = "4"
-        destination   = var.k8s_subnet_cidr
-        description = "IPIP private subnet egress block"
      }
 }
