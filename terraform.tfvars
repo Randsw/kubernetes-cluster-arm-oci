@@ -15,3 +15,7 @@ label_prefix = "kube"
 internet_gateway_display_name = "internet-gateway"
 
 security_list_name = "security-list"
+
+subnet_display_name= "subnet"
+
+subnet_dns_label = "cluster"

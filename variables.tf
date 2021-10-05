@@ -51,3 +51,13 @@ variable k8s_subnet_cidr {
     description = "Kubernetes Cluster subnet CIDR"
     default = "172.19.0.0/24"
 }
+
+variable "subnet_display_name" {
+    type = string
+    description = "Kubernetes Cluster display name"
+}
+
+variable "subnet_dns_label" {
+    type = string
+    description = "Subnet DNS label"
+}
