@@ -35,16 +35,3 @@ resource "oci_core_subnet" "kube-subnet" {
     freeform_tags               = var.freeform_tags
     security_list_ids           = local.security_list_ids
 }
-
-# resource "oci_core_route_table" "kube_route_table" {
-#     compartment_id =  data.oci_identity_compartments.kube_compartments.compartments[0].id
-#     vcn_id = module.vcn.vcn_id 
-#     display_name = var.route_table_display_name
-#     freeform_tags = var.freeform_tags
-#     route_rules {
-#         network_entity_id = module.vcn.internet_gateway_id
-#         description = "Internet route rule"
-#         destination = "0.0.0.0/0"
-#         destination_type = "CIDR_BLOCK"
-#     }
-# }

@@ -19,3 +19,13 @@ security_list_name = "security-list"
 subnet_display_name= "subnet"
 
 subnet_dns_label = "cluster"
+
+kube_cp_instance_display_name = "cp"
+
+kube_worker_instance_display_name = "worker"
+
+ssh_public_keys_path = "~/.ssh/kube-oci.pub"
+
+kube_cp_private_ips = ["172.19.0.2"]
+
+kube_worker_private_ips = ["172.19.0.3", "172.19.0.4"]

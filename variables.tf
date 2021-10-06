@@ -61,3 +61,59 @@ variable "subnet_dns_label" {
     type = string
     description = "Subnet DNS label"
 }
+
+variable "kube_cp_instance_display_name" {
+    type = string
+    description = "Kubernetes control plane instance name"
+}
+
+variable "kube_worker_instance_display_name" {
+    type = string
+    description = "Kubernetes worker instance name"
+}
+
+variable "instance_shape" {
+    type = string
+    description = "Instance shape"
+    default = "VM.Standard.A1.Flex"
+}
+
+variable "region" {
+  default = "eu-frankfurt-1" 
+  description = "Tenancy region"
+}
+
+variable "image_id" {
+  type = map(string)
+  description = "OS Image ID"
+  default = {
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa4e2ghww37p3owr7pxtz6uirsdljbegjaejgm7vmnjqyumvqg2evq"
+  }
+}
+
+variable "block_storage_sizes_in_gbs" {
+    type = string
+    description = "Size of block storage in Gb"
+    default = "50"
+}
+
+variable "instance_ad_number" {
+    type = number
+    description = "The availability domain number of the instance. If none is provided, it will start with AD-1 and continue in round-robin."
+    default = 3
+}
+
+variable "ssh_public_keys_path" {
+    type = string
+    description = "Path to ssh public key"
+}
+
+variable "kube_cp_private_ips" {
+    type = list(string)
+    description = "List of private ip for control plane instances"
+}
+
+variable "kube_worker_private_ips" {
+    type = list(string)
+    description = "List of private ip for control plan instances"
+}
