@@ -29,3 +29,9 @@ ssh_public_keys_path = "~/.ssh/kube-oci.pub"
 kube_cp_private_ips = ["172.19.0.2"]
 
 kube_worker_private_ips = ["172.19.0.3", "172.19.0.4"]
+
+load_balancer_display_name = "lb"
+
+backend_set_name = "backend-set"
+
+listener_name = "listner"

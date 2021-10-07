@@ -117,3 +117,24 @@ variable "kube_worker_private_ips" {
     type = list(string)
     description = "List of private ip for control plan instances"
 }
+
+variable "load_balancer_display_name" {
+    type = string
+    description = "Load balancer display name"
+}
+
+variable "load_balancer_shape" {
+    type = string
+    description = "Load balancer shape"
+    default = "10 Mbps"
+}
+
+variable "backend_set_name" {
+    type = string
+    description = "Load balancer backend set display name"
+}
+
+variable "listener_name" {
+    type = string
+    description = "Load balancer listner name"
+}
