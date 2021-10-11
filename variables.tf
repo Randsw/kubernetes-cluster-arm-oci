@@ -22,7 +22,7 @@ variable "vcn_dns_label" {
 variable "vcn_cidrs" {
     type = list(string)
     description = "List of VCN CIDRs"
-    default = [ "172.19.0.0/16" ]
+    default = [ "172.16.0.0/16" ]
 }
 
 variable "freeform_tags" {
@@ -45,11 +45,10 @@ variable "security_list_name" {
     description = "Subnet security list name"
 }
 
-
 variable k8s_subnet_cidr {
     type = string
     description = "Kubernetes Cluster subnet CIDR"
-    default = "172.19.0.0/24"
+    default = "172.16.10.0/24"
 }
 
 variable "subnet_display_name" {
@@ -100,7 +99,7 @@ variable "block_storage_sizes_in_gbs" {
 variable "instance_ad_number" {
     type = number
     description = "The availability domain number of the instance. If none is provided, it will start with AD-1 and continue in round-robin."
-    default = 3
+    default = 1
 }
 
 variable "ssh_public_keys_path" {
@@ -137,4 +136,14 @@ variable "backend_set_name" {
 variable "listener_name" {
     type = string
     description = "Load balancer listner name"
+}
+
+variable "backend_name" {
+    type = string
+    description = "NLB backend name"
+}
+
+variable "bastion_name" {
+    type = string
+    description = "Bastion-name"
 }

@@ -1,62 +1,109 @@
-resource "oci_load_balancer_load_balancer" "kube_load_balancer" {
+##############################################################################################################
+resource "oci_network_load_balancer_network_load_balancer" "kube_load_balancer" {
     #Required
     compartment_id = data.oci_identity_compartments.kube_compartments.compartments[0].id
     display_name = "${var.label_prefix}-${var.load_balancer_display_name}"
-    shape = var.load_balancer_shape
-    subnet_ids = [oci_core_subnet.kube-subnet.id]
-    #Optional
+    subnet_id = oci_core_subnet.kube-subnet.id
     freeform_tags = var.freeform_tags
-    ip_mode = "IPV4"
+    is_preserve_source_destination = true
     is_private = false
 }
 
-resource "oci_load_balancer_backend_set" "kube_backend_set" {
+resource "oci_network_load_balancer_backend_set" "kube_backend_set-https" {
     #Required
     health_checker {
         #Required
-        protocol = "tcp"
+        protocol = "TCP"
 
         #Optional
-        interval_ms = 1000
+        interval_in_millis = 1000
         port = 443
         retries = 3
-        timeout_in_millis = 3000
+        timeout_in_millis = 300
+
     }
-    load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
-    name = "${var.label_prefix}-${var.backend_set_name}"
-    policy = "ROUND_ROBIN"
+    name = "${var.label_prefix}-${var.backend_set_name}-https"
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    policy = "FIVE_TUPLE"
 }
 
-resource "oci_load_balancer_backend" "kube_worker1" {
+resource "oci_network_load_balancer_backend_set" "kube_backend_set-http" {
     #Required
-    backendset_name = oci_load_balancer_backend_set.kube_backend_set.name
+    health_checker {
+        #Required
+        protocol = "TCP"
+
+        #Optional
+        interval_in_millis = 1000
+        port = 80
+        retries = 3
+        timeout_in_millis = 300
+
+    }
+    name = "${var.label_prefix}-${var.backend_set_name}-http"
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    policy = "FIVE_TUPLE"
+}
+
+resource "oci_network_load_balancer_backend" "kube_worker1-https" {
+    #Required
+    backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-https.name
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    port = 443
+
+    #Optional
     ip_address = var.kube_worker_private_ips[0]
-    load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
-    port = 443
+    name = "${var.label_prefix}-${var.backend_name}1-https"
 }
 
-resource "oci_load_balancer_backend" "kube_worker2" {
+resource "oci_network_load_balancer_backend" "kube_worker2-https" {
     #Required
-    backendset_name = oci_load_balancer_backend_set.kube_backend_set.name
+    backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-https.name
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    port = 443
+
+    #Optional
     ip_address = var.kube_worker_private_ips[1]
-    load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
-    port = 443
+    name = "${var.label_prefix}-${var.backend_name}2-https"
 }
 
-resource "oci_load_balancer_listener" "kube_listener_http" {
+resource "oci_network_load_balancer_backend" "kube_worker1-http" {
     #Required
-    default_backend_set_name = oci_load_balancer_backend_set.kube_backend_set.name
-    load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
-    name = "${var.label_prefix}-${var.listener_name}-http"
+    backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-http.name
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
     port = 80
-    protocol = "tcp"
+
+    #Optional
+    ip_address = var.kube_worker_private_ips[0]
+    name = "${var.label_prefix}-${var.backend_name}1-http"
 }
 
-resource "oci_load_balancer_listener" "kube_listener_https" {
+resource "oci_network_load_balancer_backend" "kube_worker2-http" {
     #Required
-    default_backend_set_name = oci_load_balancer_backend_set.kube_backend_set.name
-    load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
+    backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-http.name
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    port = 80
+
+    #Optional
+    ip_address = var.kube_worker_private_ips[1]
+    name = "${var.label_prefix}-${var.backend_name}2-http"
+
+}
+
+resource "oci_network_load_balancer_listener" "kube_listener-http" {
+    #Required
+    default_backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-http.name
+    name = "${var.label_prefix}-${var.listener_name}-http"
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
+    port = 80
+    protocol = "TCP"
+}
+
+resource "oci_network_load_balancer_listener" "kube_listener-https" {
+    #Required
+    default_backend_set_name = oci_network_load_balancer_backend_set.kube_backend_set-https.name
     name = "${var.label_prefix}-${var.listener_name}-https"
+    network_load_balancer_id = oci_network_load_balancer_network_load_balancer.kube_load_balancer.id
     port = 443
-    protocol = "tcp"
+    protocol = "TCP"
 }

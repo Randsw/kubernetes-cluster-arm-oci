@@ -46,14 +46,14 @@ resource "oci_core_security_list" "k8s_security_list" {
         protocol      = "17"
         source        = "0.0.0.0/0"
         description   = "Allow ntp connection"
-        tcp_options {
+        udp_options {
             min = "123"
             max = "123"
         }
      }
     ingress_security_rules {
         protocol    = "1"
-        source      = "172.16.0.0/16"
+        source      = var.vcn_cidrs[0]
         description = "ICMP traffic for: 3 Destination Unreachable"
         icmp_options {
             code = -1
