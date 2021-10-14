@@ -1,6 +1,6 @@
 module "kube_cp_instance_flex" {
   source = "oracle-terraform-modules/compute-instance/oci"
-  version                     = "2.2.0-RC1"
+  version                     = "2.2.0"
   # general oci parameters
   compartment_ocid            = data.oci_identity_compartments.kube_compartments.compartments[0].id
   freeform_tags               = var.freeform_tags
@@ -15,7 +15,7 @@ module "kube_cp_instance_flex" {
   instance_flex_ocpus         = 1 # only used if shape is Flex type
   hostname_label              = "${var.label_prefix}-${var.kube_cp_instance_display_name}"
   # operating system parameters
-  ssh_public_key_path         = var.ssh_public_keys_path
+  ssh_public_keys             = "${file(var.ssh_public_keys_path)}"
   # networking parameters
   assign_public_ip            = false
   subnet_ocids                = [oci_core_subnet.kube-subnet.id]
@@ -28,7 +28,7 @@ module "kube_cp_instance_flex" {
 
 module "kube_worker_instance_flex" {
   source = "oracle-terraform-modules/compute-instance/oci"
-  version                     = "2.2.0-RC1"
+  version                     = "2.2.0"
   # general oci parameters
   compartment_ocid            = data.oci_identity_compartments.kube_compartments.compartments[0].id
   freeform_tags               = var.freeform_tags
@@ -43,7 +43,7 @@ module "kube_worker_instance_flex" {
   instance_flex_ocpus         = 1 # only used if shape is Flex type
   hostname_label              = "${var.label_prefix}-${var.kube_worker_instance_display_name}"
   # operating system parameters
-  ssh_public_key_path         = var.ssh_public_keys_path
+  ssh_public_keys             = "${file(var.ssh_public_keys_path)}"
   # networking parameters
   assign_public_ip            = false
   subnet_ocids                = [oci_core_subnet.kube-subnet.id]
