@@ -147,3 +147,9 @@ variable "bastion_name" {
     type = string
     description = "Bastion-name"
 }
+
+variable "session_session_ttl_in_seconds"{
+    type = number
+    description = "Basstion session in seconds"
+    default = 10800
+}
