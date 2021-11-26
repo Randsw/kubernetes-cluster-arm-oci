@@ -9,3 +9,7 @@ output "worker1-session-output"{
 output "worker2-session-output"{
     value = data.oci_bastion_session.worker2_session_data.ssh_metadata["command"]
 }
+
+output "cp-public-ip"{
+    value = module.kube_cp_instance_flex.public_ip[0]
+}

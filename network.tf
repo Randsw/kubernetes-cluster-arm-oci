@@ -4,7 +4,7 @@ locals {
 
 module "vcn" {
     source                          = "oracle-terraform-modules/vcn/oci"
-    version                         = "3.0.0"
+    version                         = "3.1.0"
     # general oci parameters
     compartment_id                  = data.oci_identity_compartments.kube_compartments.compartments[0].id
     label_prefix                    = var.label_prefix

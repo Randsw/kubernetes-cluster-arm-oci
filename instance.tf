@@ -17,7 +17,7 @@ module "kube_cp_instance_flex" {
   # operating system parameters
   ssh_public_keys             = "${file(var.ssh_public_keys_path)}"
   # networking parameters
-  assign_public_ip            = false
+  assign_public_ip            = true
   subnet_ocids                = [oci_core_subnet.kube-subnet.id]
   private_ips                 = var.kube_cp_private_ips
   skip_source_dest_check      = true
