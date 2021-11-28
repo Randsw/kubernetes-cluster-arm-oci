@@ -17,7 +17,11 @@
   apt_repository:
     repo: "{{ kubernetes_apt_repository }}"
     state: present
-    update_cache: true
+    #update_cache: true
+
+- name: Run apt-get update
+  apt:
+    update_cache: yes
 
 - name: Add Kubernetes apt preferences file to pin a version.
   template:

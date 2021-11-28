@@ -1,8 +1,9 @@
 # ansible_host: 192.168.1.210
 # ansible_user: vagrant
 # ansible_ssh_private_key_file: "./.vagrant/machines/{{ inventory_hostname }}/virtualbox/private_key"
-ansible_host: 127.0.0.1
-ansible_port: 2224
+ansible_host: 130.61.73.167
+ansible_port: 22
 ansible_user: ubuntu
-ansible_ssh_private_key_file: "~/ya_rsa"
-vpn_ip_address: 172.16.10.4
+ansible_ssh_private_key_file: "~/.ssh/kube-oci"
+vpc_ip_address: 172.16.10.4
+kubernetes_role: node

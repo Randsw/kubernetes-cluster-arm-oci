@@ -78,6 +78,18 @@ resource "oci_core_security_list" "k8s_security_list" {
             min = 22
             }
         }
+    ingress_security_rules {
+        protocol = "4"
+        source   = var.k8s_subnet_cidr
+        description = "IPIP private subnet ingress block"
+     }
+
+
+    egress_security_rules {
+        protocol = "4"
+        destination   = var.k8s_subnet_cidr
+        description = "IPIP private subnet egress block"
+     }
 
     egress_security_rules {
         protocol      = "6"

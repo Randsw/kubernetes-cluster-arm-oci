@@ -12,7 +12,7 @@ module "kube_cp_instance_flex" {
   source_ocid                 = "${var.image_id[var.region]}"
   source_type                 = "image"
   instance_flex_memory_in_gbs = 6 # only used if shape is Flex type
-  instance_flex_ocpus         = 1 # only used if shape is Flex type
+  instance_flex_ocpus         = 2 # only used if shape is Flex type
   hostname_label              = "${var.label_prefix}-${var.kube_cp_instance_display_name}"
   # operating system parameters
   ssh_public_keys             = "${file(var.ssh_public_keys_path)}"
@@ -45,7 +45,7 @@ module "kube_worker_instance_flex" {
   # operating system parameters
   ssh_public_keys             = "${file(var.ssh_public_keys_path)}"
   # networking parameters
-  assign_public_ip            = false
+  assign_public_ip            = true
   subnet_ocids                = [oci_core_subnet.kube-subnet.id]
   private_ips                 = var.kube_worker_private_ips
   skip_source_dest_check      = true

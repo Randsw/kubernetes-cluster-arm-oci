@@ -1,15 +1,23 @@
-output "cp-session-output"{
-    value = data.oci_bastion_session.cp_session_data.ssh_metadata["command"]
-}
+# output "cp-session-output"{
+#     value = data.oci_bastion_session.cp_session_data.ssh_metadata["command"]
+# }
 
-output "worker1-session-output"{
-    value = data.oci_bastion_session.worker1_session_data.ssh_metadata["command"]
-}
+# output "worker1-session-output"{
+#     value = data.oci_bastion_session.worker1_session_data.ssh_metadata["command"]
+# }
 
-output "worker2-session-output"{
-    value = data.oci_bastion_session.worker2_session_data.ssh_metadata["command"]
-}
+# output "worker2-session-output"{
+#     value = data.oci_bastion_session.worker2_session_data.ssh_metadata["command"]
+# }
 
 output "cp-public-ip"{
     value = module.kube_cp_instance_flex.public_ip[0]
+}
+
+output "worker1-public-ip"{
+    value = module.kube_worker_instance_flex.public_ip[0]
+}
+
+output "worker2-public-ip"{
+    value = module.kube_worker_instance_flex.public_ip[1]
 }

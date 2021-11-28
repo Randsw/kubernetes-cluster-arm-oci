@@ -92,7 +92,7 @@
         line:  '\1{{ item.replace }}'
         backrefs: yes
       loop:
-      - { search: "http://127.0.0.1:2381", replace: "http://{{ ansible_host }}:2381" }
+      - { search: "http://127.0.0.1:2381", replace: "http://{{ vpc_ip_address }}:2381" }
      
     - include_tasks: k8s_cp_probes_address_changer.yml
       loop: "{{ k8s_cp_manifest_file }}"

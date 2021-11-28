@@ -6,4 +6,4 @@
     line:  '\g<1>{{ item.replace }}'
     backrefs: yes
   loop:
-  - { search: "127.0.0.1", replace: "{{ ansible_host }}" }
+  - { search: "127.0.0.1", replace: "{{ vpc_ip_address }}" }

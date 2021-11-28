@@ -11,7 +11,7 @@ kubernetes_packages:
 
 kubernetes_version: '1.21'
 kubernetes_version_rhel_package: '1.19.0'
-cillium_version: '1.9.3'
+cillium_version: '1.9.11'
 
 kubernetes_role: control_plane
 
@@ -29,10 +29,10 @@ kubernetes_pod_network:
   # cidr: '10.244.0.0/16'
   # Calico CNI.
   cni: 'calico'
-  cidr: '10.7.0.0/16'
+  cidr: '10.10.0.0/16'
   # Cillium CNI
   #cni: 'cillium'
-  #cidr: '10.0.0.0/8'
+  #cidr: '10.7.0.0/16'
 
 calico_choose_eth_interface: 'false'
 

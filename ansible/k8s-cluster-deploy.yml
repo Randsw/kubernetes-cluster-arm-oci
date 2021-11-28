@@ -55,7 +55,7 @@
     - name: Fill /etc/hosts with hosts entry
       lineinfile:
         path: /etc/hosts
-        line: "{{ hostvars[item]['ansible_host'] }}  {{ item }}"
+        line: "{{ hostvars[item]['vpc_ip_address'] }}  {{ item }}"
       loop: "{{ groups['k8s_cluster'] }}"
 
     - name: Stop iptables
@@ -64,13 +64,13 @@
         state: stopped
 
     - name: Delete default reject rule
-      lineinfile: 
-        dest: /etc/iptables/rule.v4
+      ansible.builtin.lineinfile: 
+        path: /etc/iptables/rules.v4
         state: absent 
-        regexp: "{{ item }}"
+        regexp: '{{ item }}'
       loop: 
-       - "-A INPUT -j REJECT --reject-with icmp-host-prohibited"
-       - "-A FORWARD -j REJECT --reject-with icmp-host-prohibited"
+       - '^-A INPUT -j REJECT --reject-with icmp-host-prohibited'
+       - '^-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
       register: default_rule_clean
 
     - name: Restart iptables
@@ -114,5 +114,5 @@
 
   roles:
     - { role: role-k8s_manifests, when: kubernetes_role == 'control_plane'}
-    - { role: role-ingress, when: kubernetes_role == 'control_plane'}
+   #- { role: role-ingress, when: kubernetes_role == 'control_plane'}
 

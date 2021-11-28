@@ -14,7 +14,7 @@
 
    - name: Delete default reject rule
      lineinfile: 
-        dest: /home/cluster01/test_iptables_ubuntu
+        dest: /home/rand/test_iptables_ubuntu
         state: absent 
         regexp: "{{ item }}"
      loop: 

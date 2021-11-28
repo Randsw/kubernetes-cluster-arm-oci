@@ -1,17 +1,17 @@
 #ansible_host: 192.168.1.220
 #ansible_user: vagrant
 #ansible_ssh_private_key_file: "./.vagrant/machines/{{ inventory_hostname }}/virtualbox/private_key"
-ansible_host: 127.0.0.1
+ansible_host: 130.61.74.217
 ansible_user: ubuntu
-ansible_port: 2222
-ansible_ssh_private_key_file: "~/ya_rsa"
+ansible_port: 22
+ansible_ssh_private_key_file: "~/.ssh/kube-oci"
 
 
 ###################### Kubernetes variable ############################################
-vpn_ip_address: 172.16.10.2
+vpc_ip_address: 172.16.10.2
 kubernetes_role: "control_plane"
 kubernetes_kubeproxy_mode: "ipvs"
-kubernetes_apiserver_advertise_address: "{{ ansible_host }}"
+kubernetes_apiserver_advertise_address: "{{ vpc_ip_address }}"
 kubernetes_cluster_domain_name: "cluster.local"
 kubernetes_cgroupDriver: "systemd"
 kubernetes_cri_socket: "/run/containerd/containerd.sock"
