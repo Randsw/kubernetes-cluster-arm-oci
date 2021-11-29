@@ -9,17 +9,44 @@
       - etcd.yaml
     k8s_kubeconfig: ~/.kube/admin.conf
     monitoring_namespace: monitoring
+    KEY_COMMENT: "Test comment"
+    KEY_NAME:    "test_keyname"
 
   pre_tasks:
 
-   - name: Delete default reject rule
-     lineinfile: 
-        dest: /home/rand/test_iptables_ubuntu
-        state: absent 
-        regexp: "{{ item }}"
-     loop: 
-       - "-A INPUT -j REJECT --reject-with icmp-host-prohibited"
-       - "-A FORWARD -j REJECT --reject-with icmp-host-prohibited"
+    - name: Create gpg key for flux
+      shell: 
+        cmd: | 
+            gpg --batch --full-generate-key <<EOF
+            %no-protection
+            Key-Type: 1
+            Key-Length: 4096
+            Subkey-Type: 1
+            Subkey-Length: 4096
+            Expire-Date: 0
+            Name-Comment: {{ KEY_COMMENT}}
+            Name-Real: {{ KEY_NAME }}
+            EOF
+    
+    - name: Get key FP
+      command: "gpg --list-secret-keys {{ KEY_NAME }}"
+      register: gpg_fp_out
+    
+    - name: Debug gpg_fp
+      set_fact:
+            gpg_fp: "{{ gpg_fp_out.stdout_lines[1] | trim }}"
+    
+    - debug:
+        var: gpg_fp
+
+#    - name: Delete default reject rule
+#      lineinfile: 
+#         dest: /home/rand/test_iptables_ubuntu
+#         state: absent 
+#         regexp: "{{ item }}"
+#      loop: 
+#        - "-A INPUT -j REJECT --reject-with icmp-host-prohibited"
+#        - "-A FORWARD -j REJECT --reject-with icmp-host-prohibited"
     # - name: Add taints to gw nodes
     #   command: kubectl taint nodes {{ node }} {{ kubernetes_gw_taints }}
     #   loop: "{{ groups['k8s_ha_gateway'] }}"
