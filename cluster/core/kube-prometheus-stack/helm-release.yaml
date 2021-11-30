@@ -1,0 +1,45 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: monitoring
+  namespace: monitoring
+spec:
+  interval: 5m
+  chart: 
+    spec: 
+      chart: kube-prometheus-stack
+      version: '21.0.x'
+      sourceRef:
+        name: kube-prometheus-stack-charts
+        kind: HelmRepository
+        namespace: flux-system
+  values:
+    grafana:
+      image:
+        repository: grafana/grafana
+        tag: 7.5.5 # Some problem with 8.0.0 version. Grafana web interface error
+        sha: ""
+        pullPolicy: IfNotPresent
+      ingress:
+          enabled: true
+          hosts: 
+            - "{{ grafana_ingress_host }}"
+          path: /
+          pathType: Prefix
+          annotations:
+            kubernetes.io/ingress.class: nginx
+      kubeControllerManager:
+        service:
+          targetPort: 10257
+        serviceMonitor:
+          https: true
+          insecureSkipVerify: true
+      kubeScheduler:
+        service:
+          targetPort: 10259
+        serviceMonitor:
+          https: true                                                                                                                                              
+          insecureSkipVerify: true
+      kubeEtcd:
+        service:
+          targetPort: 2381
