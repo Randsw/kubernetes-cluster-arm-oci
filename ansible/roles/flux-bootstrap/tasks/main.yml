@@ -1,5 +1,15 @@
+- name: Get playbook executor username
+  become: false
+  local_action: command whoami
+  register: playbook_executor_username
+  changed_when: false
+
 - name: Install Flux
   command: curl -s https://fluxcd.io/install.sh | sudo bash
+
+- name: Install SOPS
+  apt:
+    deb: https://github.com/mozilla/sops/releases/download/v3.7.1/sops_3.7.1_amd64.deb
 
 - name: Create gpg key for flux
     shell: 
@@ -32,6 +42,25 @@
          kubectl create secret generic sops-gpg \
          --namespace=flux-system \
          --from-file=sops.asc=/dev/stdin'
+
+- name: Export pub key 
+  command: "gpg --export --armor {{ gpg_fp }} > /opt/.sops.pub.asc"
+
+- name: Copy public gpg key to ansible host
+  fetch:
+    src: "/opt/.sops.pub.asc"
+    dest: "/home/{{ playbook_executor_username.stdout }}/.gnupg/"
+    flat: yes
+
+- name: Delete secret key from ansible provisioner
+  command: "gpg --delete-secret-keys {{ gpg_fp }}"
+
+- name: Create gitlab-token secret
+  command: kubectl create secret generic gitlab-token --from-literal=token={{ gitlab-token }} -n flux-system --dry-run=client -o yaml | sops --input-type yaml --e -p {{ gpg_fp}} --encrypted-regex '^(data|stringData)$' --output-type yaml /dev/stdin | kubectl apply -f
+
+- name: Create gitlab-runner namespace
+
+- name: Create gitlab-runner registration token secret
 
 - name: Deploy Flux
   command: kubectl apply --kustomize=./cluster/base/flux-system
