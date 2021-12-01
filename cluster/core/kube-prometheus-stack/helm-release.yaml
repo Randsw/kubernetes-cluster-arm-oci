@@ -21,13 +21,7 @@ spec:
         sha: ""
         pullPolicy: IfNotPresent
       ingress:
-          enabled: true
-          hosts: 
-            - "{{ grafana_ingress_host }}"
-          path: /
-          pathType: Prefix
-          annotations:
-            kubernetes.io/ingress.class: nginx
+          enabled: false
       kubeControllerManager:
         service:
           targetPort: 10257

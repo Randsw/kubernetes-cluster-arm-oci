@@ -4,16 +4,22 @@
   register: playbook_executor_username
   changed_when: false
 
-- name: Install Flux
-  command: curl -s https://fluxcd.io/install.sh | sudo bash
+- name: Get playbook host username
+  become: false
+  command: whoami
+  register: ansible_host_username
+  changed_when: false
 
-- name: Install SOPS
-  apt:
-    deb: https://github.com/mozilla/sops/releases/download/v3.7.1/sops_3.7.1_amd64.deb
+# - name: Install Flux
+#   command: curl -s https://fluxcd.io/install.sh | sudo bash
+
+# - name: Install SOPS
+#   apt:
+#     deb: https://github.com/mozilla/sops/releases/download/v3.7.1/sops_3.7.1_amd64.deb
 
 - name: Create gpg key for flux
-    shell: 
-      cmd: | 
+  shell: 
+    cmd: | 
         gpg --batch --full-generate-key <<EOF
         %no-protection
         Key-Type: 1
@@ -26,41 +32,50 @@
         EOF
 
 - name: Get key FP
-    command: "gpg --list-secret-keys {{ KEY_NAME }}"
-    register: gpg_fp_out
+  command: "gpg --list-secret-keys {{ KEY_NAME }}"
+  register: gpg_fp_out
 
 - name: Debug gpg_fp
   set_fact:
         gpg_fp: "{{ gpg_fp_out.stdout_lines[1] | trim }}"
 
-- name: Create namespace for flux
-  command: kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f - 
-
-- name: Create SOPS secret in flux-system namespace
-  shell: | 
-        'gpg --export-secret-keys --armor "{{ gpg_fp }}" |
-         kubectl create secret generic sops-gpg \
-         --namespace=flux-system \
-         --from-file=sops.asc=/dev/stdin'
-
 - name: Export pub key 
-  command: "gpg --export --armor {{ gpg_fp }} > /opt/.sops.pub.asc"
+  shell: "gpg --export --armor {{ gpg_fp }} > /home/{{ ansible_host_username.stdout }}/.gnupg/.sops.pub.asc"
 
 - name: Copy public gpg key to ansible host
   fetch:
-    src: "/opt/.sops.pub.asc"
+    src: "/home/{{ ansible_host_username.stdout }}/.gnupg/.sops.pub.asc"
     dest: "/home/{{ playbook_executor_username.stdout }}/.gnupg/"
     flat: yes
 
+- name: Create namespace for flux
+  shell: kubectl create namespace flux-system --dry-run=client -o yaml | kubectl apply -f - 
+
+- name: Create SOPS secret in flux-system namespace
+  shell: gpg --export-secret-keys --armor "{{ gpg_fp }}" | kubectl create secret generic sops-gpg --namespace=flux-system --from-file=sops.asc=/dev/stdin
+
 - name: Delete secret key from ansible provisioner
-  command: "gpg --delete-secret-keys {{ gpg_fp }}"
+  command: "gpg --batch --yes --delete-secret-keys {{ gpg_fp }}"
 
 - name: Create gitlab-token secret
-  command: kubectl create secret generic gitlab-token --from-literal=token={{ gitlab-token }} -n flux-system --dry-run=client -o yaml | sops --input-type yaml --e -p {{ gpg_fp}} --encrypted-regex '^(data|stringData)$' --output-type yaml /dev/stdin | kubectl apply -f
+  shell: kubectl create secret generic gitlab-token --from-literal=token={{ gitlab_token }} -n flux-system --dry-run=client -o yaml | kubectl apply -f -
 
 - name: Create gitlab-runner namespace
+  shell: kubectl create namespace gitlab-runner --dry-run=client -o yaml | kubectl apply -f - 
 
 - name: Create gitlab-runner registration token secret
+  shell: kubectl create secret generic gitlab-runner-registration-token --from-literal=runnerRegistrationToken={{ gitlab_registration_token }} -n gitlab-runner --dry-run=client -o yaml | kubectl apply -f -
 
+- name: Create dir for Flux
+  file:
+    path: /home/{{ ansible_host_username.stdout }}/flux
+    state: directory
+    mode: '0755'
+
+- name: Get Flux base files to ansible host
+  ansible.builtin.git:
+    repo: https://gitlab.com/randsw06/k8s-oci-arm.git
+    dest: /home/{{ ansible_host_username.stdout }}/flux
+    
 - name: Deploy Flux
-  command: kubectl apply --kustomize=./cluster/base/flux-system
+  command: kubectl apply --kustomize=/home/{{ ansible_host_username.stdout }}/flux/cluster/base/flux-system

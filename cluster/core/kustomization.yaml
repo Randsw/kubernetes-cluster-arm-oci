@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - ingress-nginx
   - kube-prometheus-stack
+  - gitlab-runner

@@ -14,30 +14,30 @@
 
   pre_tasks:
 
-    - name: Create gpg key for flux
-      shell: 
-        cmd: | 
-            gpg --batch --full-generate-key <<EOF
-            %no-protection
-            Key-Type: 1
-            Key-Length: 4096
-            Subkey-Type: 1
-            Subkey-Length: 4096
-            Expire-Date: 0
-            Name-Comment: {{ KEY_COMMENT}}
-            Name-Real: {{ KEY_NAME }}
-            EOF
+    # - name: Create gpg key for flux
+    #   shell: 
+    #     cmd: | 
+    #         gpg --batch --full-generate-key <<EOF
+    #         %no-protection
+    #         Key-Type: 1
+    #         Key-Length: 4096
+    #         Subkey-Type: 1
+    #         Subkey-Length: 4096
+    #         Expire-Date: 0
+    #         Name-Comment: {{ KEY_COMMENT}}
+    #         Name-Real: {{ KEY_NAME }}
+    #         EOF
     
-    - name: Get key FP
-      command: "gpg --list-secret-keys {{ KEY_NAME }}"
-      register: gpg_fp_out
+    # - name: Get key FP
+    #   command: "gpg --list-secret-keys {{ KEY_NAME }}"
+    #   register: gpg_fp_out
     
-    - name: Debug gpg_fp
-      set_fact:
-            gpg_fp: "{{ gpg_fp_out.stdout_lines[1] | trim }}"
+    # - name: Debug gpg_fp
+    #   set_fact:
+    #         gpg_fp: "{{ gpg_fp_out.stdout_lines[1] | trim }}"
     
-    - debug:
-        var: gpg_fp
+    # - debug:
+    #     var: gpg_fp
 
 #    - name: Delete default reject rule
 #      lineinfile: 
@@ -104,9 +104,12 @@
   #     loop_control:
   #       loop_var: k8s_manifests
 
-
+- hosts: k8s_cluster
+  become: no
+  gather_facts: no
+  
   roles:
-    #- { role: role-k8s_manifests }
+    - { role: flux-bootstrap, when: kubernetes_role == 'control_plane' }
     # - { role: role-k8s_manifests, when: kubernetes_role == 'first-master'}
     # - { role: role-helm, when: kubernetes_role == 'first-master'}
     # - { role: role-efk-stack }
