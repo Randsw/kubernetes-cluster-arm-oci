@@ -18,18 +18,28 @@ spec:
     rbac:
       create: true
       clusterWideAccess: true
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    service:
+      enabled: true
+      labels:
+        release: monitoring
     runners:
       config: |
         [[runners]]
           [runners.kubernetes]
             namespace = "gitlab-runner"
-            image = "ubuntu:20.04"
+            image = "ubuntu-v14.5.0"
             privileged = true
           [runners.kubernetes.node_selector]
             "kubernetes.io/arch" = "arm64"
             "kubernetes.io/os" = "linux"
+      locked: false
+      tags: "arm64,linux,oci-k8s,kubernetes"
       helpers:
-        image: "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:ubuntu-arm64-latest"
+        image: "gitlab/gitlab-runner-helper:ubuntu-arm64-latest"
   valuesFrom:
     - kind: Secret
       name: gitlab-runner-registration-token
