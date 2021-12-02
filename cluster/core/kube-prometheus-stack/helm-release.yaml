@@ -22,18 +22,18 @@ spec:
         pullPolicy: IfNotPresent
       ingress:
           enabled: false
-      kubeControllerManager:
-        service:
-          targetPort: 10257
-        serviceMonitor:
-          https: true
-          insecureSkipVerify: true
-      kubeScheduler:
-        service:
-          targetPort: 10259
-        serviceMonitor:
-          https: true                                                                                                                                              
-          insecureSkipVerify: true
-      kubeEtcd:
-        service:
-          targetPort: 2381
+    kubeControllerManager:
+      service:
+        targetPort: 10257
+      serviceMonitor:
+        https: true
+        insecureSkipVerify: true
+    kubeScheduler:
+      service:
+        targetPort: 10259
+      serviceMonitor:
+        https: true                                                                                                                                              
+        insecureSkipVerify: true
+    kubeEtcd:
+      service:
+        targetPort: 2381

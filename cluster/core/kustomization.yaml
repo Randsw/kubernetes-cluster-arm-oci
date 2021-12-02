@@ -4,3 +4,4 @@ resources:
   - ingress-nginx
   - kube-prometheus-stack
   - gitlab-runner
+  - namespaces

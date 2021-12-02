@@ -31,7 +31,7 @@ spec:
         [[runners]]
           [runners.kubernetes]
             namespace = "gitlab-runner"
-            image = "ubuntu-v14.5.0"
+            image = "ubuntu:20.04"
             privileged = true
           [runners.kubernetes.node_selector]
             "kubernetes.io/arch" = "arm64"
