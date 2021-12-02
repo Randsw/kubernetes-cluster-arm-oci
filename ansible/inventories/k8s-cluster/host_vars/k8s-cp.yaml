@@ -24,3 +24,4 @@ kubernetes_apiserver_certSANs:
   - k8s-worker1
   - k8s-worker2
   - k8s-cp
+  - "{{ ansible_host }}"

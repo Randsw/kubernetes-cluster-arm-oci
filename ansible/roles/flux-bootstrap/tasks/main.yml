@@ -79,3 +79,7 @@
     
 - name: Deploy Flux
   command: kubectl apply --kustomize=/home/{{ ansible_host_username.stdout }}/flux/cluster/base/flux-system
+  retries: 2
+  delay: 3
+  register: result
+  until: result.rc == 0
