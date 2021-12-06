@@ -66,6 +66,12 @@
 - name: Create gitlab-runner registration token secret
   shell: kubectl create secret generic gitlab-runner-registration-token --from-literal=runnerRegistrationToken={{ gitlab_registration_token }} -n gitlab-runner --dry-run=client -o yaml | kubectl apply -f -
 
+- name: Create web-app namespace
+  shell: kubectl create namespace web-app --dry-run=client -o yaml | kubectl apply -f - 
+
+- name: Create secret to pull images from github container registry
+  shell: kubectl create secret docker-registry github-registry --docker-server=ghcr.io/randsw --docker-username=randsw --docker-password={{ GHCR_toker }} -n web-app
+
 - name: Create dir for Flux
   file:
     path: /home/{{ ansible_host_username.stdout }}/flux

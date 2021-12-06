@@ -5,3 +5,4 @@ resources:
   - kube-prometheus-stack
   - gitlab-runner
   - namespaces
+  - metrics-server

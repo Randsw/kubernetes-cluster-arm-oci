@@ -8,3 +8,4 @@ resources:
   - metrics-server-charts.yaml
   - kube-prometheus-stack-charts.yaml
   - open-policy-agent-gatekeeper-charts.yaml
+  - web-app-charts.yaml

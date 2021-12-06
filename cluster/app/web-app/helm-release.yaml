@@ -1,0 +1,22 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: web-app
+  namespace: web-app
+spec:
+  interval: 5m
+  chart: 
+    spec: 
+      chart: web-app
+      version: '0.1.x'
+      sourceRef:
+        name: web-app-charts
+        kind: HelmRepository
+        namespace: flux-system
+  values:
+    image:
+      tag: 4b4d641a
+    imagePullSecrets:
+      - name: github-registry
+    service:
+      port: 8000

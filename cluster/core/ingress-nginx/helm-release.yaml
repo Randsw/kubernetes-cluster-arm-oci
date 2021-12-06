@@ -18,8 +18,9 @@ spec:
       kind: DaemonSet
       service:
         type: NodePort
-        http: 32080
-        https: 32443
+        nodePorts:
+          http: 32080
+          https: 32443
       podAnnotations:
         fluentbit.io/parser: nginx_custom
       metrics:
