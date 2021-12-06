@@ -6,3 +6,4 @@ resources:
   - gitlab-runner
   - namespaces
   - metrics-server
+  - cert-manager

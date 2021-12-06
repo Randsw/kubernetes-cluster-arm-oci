@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   values:
     image:
-      tag: 4b4d641a
+      tag: febe425e
     imagePullSecrets:
       - name: github-registry
     service:

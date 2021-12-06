@@ -21,7 +21,13 @@ spec:
         sha: ""
         pullPolicy: IfNotPresent
       ingress:
-          enabled: false
+          enabled: true
+          hosts: 
+            - grafana.rand-k8s.tk
+          path: /
+          pathType: Prefix
+          annotations:
+            kubernetes.io/ingress.class: nginx
       dashboards:
         default:
           cert-manager:
