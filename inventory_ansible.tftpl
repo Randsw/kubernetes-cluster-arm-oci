@@ -1,0 +1,16 @@
+all:
+  children:
+    k8s_control_plane:
+      hosts:
+        k8s-cp:
+          ansible_host: ${k8s_control_plane_ip}
+    k8s_workers:
+      hosts:
+        k8s-worker1:
+          ansible_host: ${k8s_worker1_ip}
+        k8s-worker2:
+          ansible_host: ${k8s_worker2_ip}
+    k8s_cluster:
+      children:
+        k8s_control_plane:
+        k8s_workers:

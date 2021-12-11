@@ -3,7 +3,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: cert-manager.rules
-  namespace: cert-manager
+  namespace: monitoring
+  labels:
+    release: monitoring
+    app: kube-prometheus-stack
 spec:
   groups:
     - name: cert-manager

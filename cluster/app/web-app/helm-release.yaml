@@ -15,8 +15,22 @@ spec:
         namespace: flux-system
   values:
     image:
-      tag: febe425e
+      tag: 5421e70b
     imagePullSecrets:
       - name: github-registry
     service:
       port: 8000
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-staging"
+      hosts:
+        - host: app.rand-k8s.ml
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: web-app-cert-secret
+          hosts:
+            - app.rand-k8s.ml
+      

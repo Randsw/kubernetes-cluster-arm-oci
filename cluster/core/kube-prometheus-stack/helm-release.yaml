@@ -22,19 +22,18 @@ spec:
         pullPolicy: IfNotPresent
       ingress:
           enabled: true
+          ingressClassName: nginx
+          tls:
+            - secretName: grafana-cert-secret
+              hosts:
+                - grafana.rand-k8s.ml
           hosts: 
-            - grafana.rand-k8s.tk
+            - grafana.rand-k8s.ml
           path: /
           pathType: Prefix
           annotations:
             kubernetes.io/ingress.class: nginx
-      dashboards:
-        default:
-          cert-manager:
-            gnetId: 11001
-            revision: 1
-            datasource: Prometheus
-          # Ref:https://grafana.com/grafana/dashboards/11001
+            cert-manager.io/cluster-issuer: "letsencrypt-staging"
     kubeControllerManager:
       service:
         targetPort: 10257

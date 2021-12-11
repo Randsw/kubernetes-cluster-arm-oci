@@ -24,3 +24,5 @@ spec:
       servicemonitor:
         enabled: true
         prometheusInstance: monitoring
+        labels:
+          release: monitoring
