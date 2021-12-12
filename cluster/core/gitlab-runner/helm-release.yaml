@@ -24,8 +24,6 @@ spec:
         enabled: true
     service:
       enabled: true
-      labels:
-        release: monitoring
     runners:
       config: |
         [[runners]]

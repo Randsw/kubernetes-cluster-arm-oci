@@ -72,6 +72,8 @@
 - name: Create secret to pull images from github container registry
   shell: kubectl create secret docker-registry github-registry --docker-server=ghcr.io/randsw --docker-username=randsw --docker-password={{ GHCR_toker }} -n web-app
 
+# TODO Create monitoring namespace and telegram bot secret
+
 - name: Create dir for Flux
   file:
     path: /home/{{ ansible_host_username.stdout }}/flux

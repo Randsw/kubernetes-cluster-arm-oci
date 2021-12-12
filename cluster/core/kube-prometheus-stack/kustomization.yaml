@@ -4,3 +4,8 @@ resources:
   - helm-release.yaml
   - ingress-dashboard-cm.yaml
   - cert-manager-dashboard-cm.yaml
+  - flux-cluster-dashboard-cm.yaml
+  - flux-control-plane-dashboard-cm.yaml
+  - flux_podmonitor.yaml
+  - flux-prometheus-rule.yaml
+  #- gitlab-runner-dashboard-cm.yaml
