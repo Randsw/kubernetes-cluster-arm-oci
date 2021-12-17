@@ -74,6 +74,14 @@
 
 # TODO Create monitoring namespace and telegram bot secret
 
+# TODO create web app namespace and oauth2-proxy secret
+- name: Create cookie secret for oauth2
+  shell: openssl rand -base64 32 | head -c 32
+  register: oauth_cookie_secret
+
+- name: Create oauth2-proxy secret
+  shell: kubectl create secret generic oauth2-proxy-github --from-literal=client-secret={{ GITHUB_OAUTH_CLIENT_SECRET}} --from-literal=client-secret={{ GITHUB_OAUTH_CLIENT_ID }} --from-literal=client-secret={{ oauth_cookie_secret }} -n aeb-app --dry-run=client -o yaml | kubectl apply -f -
+
 - name: Create dir for Flux
   file:
     path: /home/{{ ansible_host_username.stdout }}/flux
