@@ -98,5 +98,3 @@
   delay: 3
   register: result
   until: result.rc == 0
-
-   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
