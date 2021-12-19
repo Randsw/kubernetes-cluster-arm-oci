@@ -32,7 +32,7 @@ spec:
           path: /
           pathType: Prefix
           annotations:
-            cert-manager.io/cluster-issuer: "letsencrypt-staging"
+            cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubeControllerManager:
       service:
         targetPort: 10257

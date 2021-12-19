@@ -6,4 +6,5 @@ resources:
   - monitoring.yaml
   - web-app.yaml
   - ingress-nginx.yaml
-  - keykloak.yaml
+  - keycloak.yaml
+  #- oauth2-proxy.yaml

@@ -70,17 +70,16 @@
   shell: kubectl create namespace web-app --dry-run=client -o yaml | kubectl apply -f - 
 
 - name: Create secret to pull images from github container registry
-  shell: kubectl create secret docker-registry github-registry --docker-server=ghcr.io/randsw --docker-username=randsw --docker-password={{ GHCR_toker }} -n web-app
+  shell: kubectl create secret docker-registry github-registry --docker-server=ghcr.io/randsw --docker-username=randsw --docker-password={{ GHCR_token }} -n web-app
 
 # TODO Create monitoring namespace and telegram bot secret
 
-# TODO create web app namespace and oauth2-proxy secret
 - name: Create cookie secret for oauth2
   shell: openssl rand -base64 32 | head -c 32
   register: oauth_cookie_secret
 
 - name: Create oauth2-proxy secret
-  shell: kubectl create secret generic oauth2-proxy-github --from-literal=client-secret={{ GITHUB_OAUTH_CLIENT_SECRET}} --from-literal=client-secret={{ GITHUB_OAUTH_CLIENT_ID }} --from-literal=client-secret={{ oauth_cookie_secret }} -n aeb-app --dry-run=client -o yaml | kubectl apply -f -
+  shell: kubectl create secret generic oauth2-proxy-github --from-literal=client-secret={{ GITHUB_OAUTH_CLIENT_SECRET}} --from-literal=client-id={{ GITHUB_OAUTH_CLIENT_ID }} --from-literal=cookie-secret={{ oauth_cookie_secret }} -n web-app --dry-run=client -o yaml | kubectl apply -f -
 
 - name: Create dir for Flux
   file:
@@ -99,3 +98,5 @@
   delay: 3
   register: result
   until: result.rc == 0
+
+   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

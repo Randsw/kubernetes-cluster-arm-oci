@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   values:
     image:
-      tag: 5421e70b
+      tag: 64968b4f
     imagePullSecrets:
       - name: github-registry
     service:
@@ -23,7 +23,9 @@ spec:
     ingress:
       enabled: true
       annotations:
-        cert-manager.io/cluster-issuer: "letsencrypt-staging"
+        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
       hosts:
         - host: app.rand-k8s.ml
           paths:

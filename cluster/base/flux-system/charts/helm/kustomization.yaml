@@ -4,8 +4,9 @@ resources:
   - gitlab-runner-charts.yaml
   - ingress-nginx-charts.yaml
   - jetstack-charts.yaml
-  - keykloak-chart.yaml
+  - keycloak-charts.yaml
   - metrics-server-charts.yaml
   - kube-prometheus-stack-charts.yaml
   - open-policy-agent-gatekeeper-charts.yaml
   - web-app-charts.yaml
+  - oauth2-proxy-charts.yaml

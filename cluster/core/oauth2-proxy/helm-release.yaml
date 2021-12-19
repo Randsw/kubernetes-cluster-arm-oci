@@ -1,0 +1,65 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: oauth2-proxy
+  namespace: web-app
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: oauth2-proxy
+      version: 5.0.6
+      sourceRef:
+        kind: HelmRepository
+        name: oauth2-proxy-charts
+        namespace: flux-system
+  values:
+    config:
+      # Add config annotations
+      annotations: {}
+      # Create a new secret with the following command
+      # openssl rand -base64 32 | head -c 32 | base64
+      # Use an existing secret for OAuth2 credentials (see secret.yaml for required fields)
+      # Example:
+      existingSecret: oauth2-proxy-github
+    image:
+      tag: "v7.2.0-arm64"
+    extraArgs:
+      provider: github
+    ingress:
+      enabled: true
+      className: nginx
+      path: /oauth2
+      # Only used if API capabilities (networking.k8s.io/v1) allow it
+      pathType: Prefix
+      # Used to create an Ingress record.
+      hosts:
+        - app.rand-k8s.ml
+      annotations:
+      tls:
+        - secretName: web-app-cert-secret
+          hosts:
+            - app.rand-k8s.ml
+    metrics:
+      # Enable Prometheus metrics endpoint
+      enabled: true
+      # Serve Prometheus metrics on this port
+      port: 44180
+      servicemonitor:
+        # Enable Prometheus Operator ServiceMonitor
+        enabled: true
+        # Define the namespace where to deploy the ServiceMonitor resource
+        namespace: monitoring
+        # Prometheus Instance definition
+        prometheusInstance: monitoring
+        # Prometheus scrape interval
+        interval: 60s
+        # Prometheus scrape timeout
+        scrapeTimeout: 30s
+        # Add custom labels to the ServiceMonitor resource
+        labels:
+          release: monitoring
+    service:
+      portNumber: 4180
+

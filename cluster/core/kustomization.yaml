@@ -7,3 +7,5 @@ resources:
   - namespaces
   - metrics-server
   - cert-manager
+  - oauth2-proxy
+  #- keycloak
