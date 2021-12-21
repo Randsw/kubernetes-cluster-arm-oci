@@ -80,6 +80,14 @@
 - name: Create dex github secret
   shell: kubectl create secret generic dex-github --from-literal=GITHUB_CLIENT_ID={{ GITHUB_DEX_CLIENT_ID}} --from-literal=GITHUB_CLIENT_SECRET={{ GITHUB_DEX_CLIENT_SECRET }} -n dex --dry-run=client -o yaml | kubectl apply -f -
 
+- name: Load kube-api cert
+  slurp:
+    src: "/etc/kubernetes/pki/ca.crt"
+  register: kube_api_cert
+
+- name: Create kube-api cert secret
+  shell: kubectl create secret generic dex-kube-cert --from-literal=KUBE_API_CERT={{ kube_api_cert | b64encode }} -n dex --dry-run=client -o yaml | kubectl apply -f -
+
 - name: Create cookie secret for oauth2
   shell: openssl rand -base64 32 | head -c 32
   register: oauth_cookie_secret
