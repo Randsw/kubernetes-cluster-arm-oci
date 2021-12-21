@@ -1,8 +1,10 @@
 ---
 KEY_COMMENT: "Flux Mozilla SOPS"
 KEY_NAME:    "Flux2-oci-k8s-arm"
-gitlab_token: dummy
-gitlab_registration_token: dummy
-GHCR_token: dummy
-GITHUB_OAUTH_CLIENT_ID: dummy
-GITHUB_OAUTH_CLIENT_SECRET: dummy
+# gitlab_token: dummy
+# gitlab_registration_token: dummy
+# GHCR_token: dummy
+# GITHUB_OAUTH_CLIENT_ID: dummy
+# GITHUB_OAUTH_CLIENT_SECRET: dummy
+# GITHUB_DEX_CLIENT_ID: GITHUB_DEX_CLIENT_SECRET
+
