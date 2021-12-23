@@ -9,7 +9,7 @@ apiServer:
   extraArgs:
     enable-admission-plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
     authorization-mode: Node,RBAC
-    oidc-client-id: kubernetes
+    oidc-client-id: dex-k8s-authenticator
     oidc-groups-claim: groups
     oidc-issuer-url: "https://dex.{{ oci_k8s_arm_domain }}"
     oidc-username-claim: email
