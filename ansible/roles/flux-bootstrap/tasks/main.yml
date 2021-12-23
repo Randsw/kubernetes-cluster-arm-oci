@@ -72,13 +72,17 @@
 - name: Create secret to pull images from github container registry
   shell: kubectl create secret docker-registry github-registry --docker-server=ghcr.io/randsw --docker-username=randsw --docker-password={{ GHCR_token }} -n web-app
 
-# TODO Create monitoring namespace and telegram bot secret
+- name: Create monitoring namespace
+  shell: kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f - 
+
+- name: Create telegram bot secret
+  shell: kubectl create secret generic alertmanager-bot --from-literal=admin={{ TG_ADMIN }} --from-literal=token={{ TG_TOKEN }} -n monitoring --dry-run=client -o yaml | kubectl apply -f -
 
 - name: Create dex namespace
   shell: kubectl create namespace web-app --dry-run=client -o yaml | kubectl apply -f -
 
 - name: Create dex github secret
-  shell: kubectl create secret generic dex-github --from-literal=GITHUB_CLIENT_ID={{ GITHUB_DEX_CLIENT_ID}} --from-literal=GITHUB_CLIENT_SECRET={{ GITHUB_DEX_CLIENT_SECRET }} -n dex --dry-run=client -o yaml | kubectl apply -f -
+  shell: kubectl create secret generic dex-github --from-literal=GITHUB_CLIENT_ID={{ GITHUB_DEX_CLIENT_ID }} --from-literal=GITHUB_CLIENT_SECRET={{ GITHUB_DEX_CLIENT_SECRET }} -n dex --dry-run=client -o yaml | kubectl apply -f -
 
 - name: Load kube-api cert
   slurp:
