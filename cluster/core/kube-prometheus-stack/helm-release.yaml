@@ -48,3 +48,26 @@ spec:
     kubeEtcd:
       service:
         targetPort: 2381
+    alertmanager:
+      config:
+        route:
+          receiver: "alertmanager-bot"
+          group_by:
+            - job
+          continue: false
+          routes:
+          - receiver: "null"
+            match:
+              alertname: Watchdog
+            continue: false
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 12h
+        receivers:
+          - name: "null"  
+          - name: 'alertmanager-bot'
+            webhook_configs:
+              - send_resolved: true
+                url: 'http://alertmanager-bot:8080'
+        templates:
+        - /etc/alertmanager/config/*.tmpl

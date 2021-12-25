@@ -8,3 +8,4 @@ resources:
   - ingress-nginx.yaml
   - keycloak.yaml
   #- oauth2-proxy.yaml
+  - dex.yaml

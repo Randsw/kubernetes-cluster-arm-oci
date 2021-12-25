@@ -9,3 +9,4 @@ resources:
   - flux_podmonitor.yaml
   - flux-prometheus-rule.yaml
   #- gitlab-runner-dashboard-cm.yaml
+  - alertmanager-tg.yaml

@@ -9,3 +9,5 @@ resources:
   - cert-manager
   - oauth2-proxy
   #- keycloak
+  - dex
+  - dex-k8s-authenticator

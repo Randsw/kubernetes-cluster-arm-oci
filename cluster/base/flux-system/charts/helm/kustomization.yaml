@@ -10,3 +10,5 @@ resources:
   - open-policy-agent-gatekeeper-charts.yaml
   - web-app-charts.yaml
   - oauth2-proxy-charts.yaml
+  - dex-k8s-authenticator.yaml
+  - dex-charts.yaml
