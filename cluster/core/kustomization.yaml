@@ -11,3 +11,4 @@ resources:
   #- keycloak
   - dex
   - dex-k8s-authenticator
+  - open-policy-agent-gatekeeper

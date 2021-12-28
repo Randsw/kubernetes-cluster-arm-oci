@@ -9,3 +9,4 @@ resources:
   - keycloak.yaml
   #- oauth2-proxy.yaml
   - dex.yaml
+  - opa-gatekeeper.yaml

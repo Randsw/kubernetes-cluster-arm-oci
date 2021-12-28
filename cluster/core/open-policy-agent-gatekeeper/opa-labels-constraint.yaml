@@ -1,0 +1,15 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata:
+  name: pod-must-have-gkt-label
+spec:
+  enforcementAction: warn
+  match:
+    kinds:
+      - apiGroups: ["*"]
+        kinds: ["Pod", "Deployment"]
+    namespaces: ["default"]
+    scope: Namespaced
+  parameters:
+    labels: ["gatekeeper-test"]
