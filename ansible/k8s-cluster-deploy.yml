@@ -111,8 +111,10 @@
 - hosts: k8s_cluster
   become: no
   gather_facts: no
+  vars_files:
+    - cluster-secret.yml
 
   roles:
     - { role: role-k8s_manifests, when: kubernetes_role == 'control_plane'}
-   #- { role: role-ingress, when: kubernetes_role == 'control_plane'}
+    - { role: flux-bootstrap, when: kubernetes_role == 'control_plane'}
 
