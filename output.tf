@@ -23,7 +23,7 @@ output "worker2-public-ip"{
 }
 
 output "lb-public-ip"{
-    value = oci_load_balancer_load_balancer.kube_load_balancer.ip_address_details.ip_address
+    value = oci_load_balancer_load_balancer.kube_load_balancer.ip_address_details[0].ip_address
 }
 
 locals {

@@ -125,7 +125,17 @@ variable "load_balancer_display_name" {
 variable "load_balancer_shape" {
     type = string
     description = "Load balancer shape"
-    default = "10 Mbps"
+    default = "flexible"
+}
+
+variable "load_balancer_shape_details_maximum_bandwidth_in_mbps" {
+  type = string
+  default = 10
+}
+
+variable "load_balancer_shape_details_minimum_bandwidth_in_mbps" {
+  type = string
+  default = 10
 }
 
 variable "backend_set_name" {

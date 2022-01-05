@@ -8,13 +8,18 @@ resource "oci_load_balancer_load_balancer" "kube_load_balancer" {
     freeform_tags = var.freeform_tags
     ip_mode = "IPV4"
     is_private = false
+    shape_details {
+        #Required
+        maximum_bandwidth_in_mbps = var.load_balancer_shape_details_maximum_bandwidth_in_mbps
+        minimum_bandwidth_in_mbps = var.load_balancer_shape_details_minimum_bandwidth_in_mbps
+    }
 }
 
 resource "oci_load_balancer_backend_set" "kube_backend_set_http" {
     #Required
     health_checker {
         #Required
-        protocol = "tcp"
+        protocol = "TCP"
 
         #Optional
         interval_ms = 1000
@@ -48,7 +53,7 @@ resource "oci_load_balancer_backend_set" "kube_backend_set_https" {
     #Required
     health_checker {
         #Required
-        protocol = "tcp"
+        protocol = "TCP"
 
         #Optional
         interval_ms = 1000
@@ -81,7 +86,7 @@ resource "oci_load_balancer_listener" "kube_listener_http" {
     load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
     name = "${var.label_prefix}-${var.listener_name}-http"
     port = 80
-    protocol = "tcp"
+    protocol = "TCP"
 }
 
 resource "oci_load_balancer_listener" "kube_listener_https" {
@@ -90,5 +95,5 @@ resource "oci_load_balancer_listener" "kube_listener_https" {
     load_balancer_id = oci_load_balancer_load_balancer.kube_load_balancer.id
     name = "${var.label_prefix}-${var.listener_name}-https"
     port = 443
-    protocol = "tcp"
+    protocol = "TCP"
 }
