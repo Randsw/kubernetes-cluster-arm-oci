@@ -28,85 +28,85 @@
         state: directory
 
  
-- hosts: k8s_cluster
-  become: yes
-  gather_facts: yes
+# - hosts: k8s_cluster
+#   become: yes
+#   gather_facts: yes
 
-  pre_tasks:
+#   pre_tasks:
      
-    - name: Print ip address of VW
-      debug:
-        var:  hostvars[item]['ansible_eth0']['ipv4']['address']
-      loop: "{{ groups['all'] }}"
+#     - name: Print ip address of VW
+#       debug:
+#         var:  hostvars[item]['ansible_eth0']['ipv4']['address']
+#       loop: "{{ groups['all'] }}"
   
-    - name: Run the equivalent of "apt-get update" as a separate step
-      apt:
-        update_cache: yes
+#     - name: Run the equivalent of "apt-get update" as a separate step
+#       apt:
+#         update_cache: yes
 
-    - name: Find timezone
-      command: timedatectl 
-      register: timedate_output
-      changed_when: false
+#     - name: Find timezone
+#       command: timedatectl 
+#       register: timedate_output
+#       changed_when: false
 
-    - name: Set time zone
-      command: timedatectl set-timezone Europe/Moscow
-      when: '"Moscow" not in timedate_output.stdout'
+#     - name: Set time zone
+#       command: timedatectl set-timezone Europe/Moscow
+#       when: '"Moscow" not in timedate_output.stdout'
 
-    - name: Fill /etc/hosts with hosts entry
-      lineinfile:
-        path: /etc/hosts
-        line: "{{ hostvars[item]['vpc_ip_address'] }}  {{ item }}"
-      loop: "{{ groups['k8s_cluster'] }}"
+#     - name: Fill /etc/hosts with hosts entry
+#       lineinfile:
+#         path: /etc/hosts
+#         line: "{{ hostvars[item]['vpc_ip_address'] }}  {{ item }}"
+#       loop: "{{ groups['k8s_cluster'] }}"
 
-    - name: Stop iptables
-      service:
-        name: iptables
-        state: stopped
+#     - name: Stop iptables
+#       service:
+#         name: iptables
+#         state: stopped
 
-    - name: Delete default reject rule
-      ansible.builtin.lineinfile: 
-        path: /etc/iptables/rules.v4
-        state: absent 
-        regexp: '{{ item }}'
-      loop: 
-       - '^-A INPUT -j REJECT --reject-with icmp-host-prohibited'
-       - '^-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
-      register: default_rule_clean
+#     - name: Delete default reject rule
+#       ansible.builtin.lineinfile: 
+#         path: /etc/iptables/rules.v4
+#         state: absent 
+#         regexp: '{{ item }}'
+#       loop: 
+#        - '^-A INPUT -j REJECT --reject-with icmp-host-prohibited'
+#        - '^-A FORWARD -j REJECT --reject-with icmp-host-prohibited'
+#       register: default_rule_clean
 
-    - name: Restart iptables
-      service:
-        name: iptables
-        state: restarted
+#     - name: Restart iptables
+#       service:
+#         name: iptables
+#         state: restarted
 
-    - name: Save firewall rule
-      command: netfilter-persistent save
+#     - name: Save firewall rule
+#       command: netfilter-persistent save
 
-    - name: Install nessesary package
-      block:
-        - name: Install pip
-          apt:
-            name: python3-pip
-            state: present
-            update_cache: yes
+#     - name: Install nessesary package
+#       block:
+#         - name: Install pip
+#           apt:
+#             name: python3-pip
+#             state: present
+#             update_cache: yes
 
-        - name: Install jq
-          apt:
-            name: jq
-            state: present
+#         - name: Install jq
+#           apt:
+#             name: jq
+#             state: present
            
-        - name: Install openshift
-          pip:
-            name: "{{ item }}"
-          loop:
-            - kubernetes-validate
-            - openshift
-      when: kubernetes_role == 'control_plane'
+#         - name: Install openshift
+#           pip:
+#             name: "{{ item }}"
+#           loop:
+#             - kubernetes-validate
+#             - openshift
+#       when: kubernetes_role == 'control_plane'
    
-  roles:
-    - { role: ansible-ntp-master }
-    - { role: geerlingguy.containerd }
-    - { role: role-kubernetes }
-    - { role: role-helm, when: kubernetes_role == 'control_plane' }
+#   roles:
+#     - { role: ansible-ntp-master }
+#     - { role: geerlingguy.containerd }
+#     - { role: role-kubernetes }
+#     - { role: role-helm, when: kubernetes_role == 'control_plane' }
 
 - hosts: k8s_cluster
   become: no
@@ -115,6 +115,6 @@
     - cluster-secret.yml
 
   roles:
-    - { role: role-k8s_manifests, when: kubernetes_role == 'control_plane'}
+    #- { role: role-k8s_manifests, when: kubernetes_role == 'control_plane'}
     - { role: flux-bootstrap, when: kubernetes_role == 'control_plane'}
 
