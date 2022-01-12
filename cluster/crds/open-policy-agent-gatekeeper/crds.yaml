@@ -1,0 +1,29 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: open-policy-agent-gatekeeper-source
+  namespace: flux-system
+spec:
+  interval: 30m
+  url: https://github.com/open-policy-agent/gatekeeper.git
+  ref:
+    tag: v3.7.0
+  ignore: |
+    # exclude all
+    /*
+    # include deploy crds dir
+    !/charts/gatekeeper/crds
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: open-policy-agent-gatekeeper-crds
+  namespace: flux-system
+spec:
+  interval: 15m
+  prune: false
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: open-policy-agent-gatekeeper-source

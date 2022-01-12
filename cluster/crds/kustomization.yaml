@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - cert-manager
   - kube-prometheus-stack
+  - open-policy-agent-gatekeeper

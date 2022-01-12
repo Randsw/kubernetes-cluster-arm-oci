@@ -43,6 +43,16 @@ resource "oci_core_security_list" "k8s_security_list" {
     }
 
     ingress_security_rules {
+        protocol      = "6"
+        source        = "0.0.0.0/0"
+        description   = "Allow k8s api connection"
+        tcp_options {
+            min = "6443"
+            max = "6443"
+        }
+    }
+
+    ingress_security_rules {
         protocol      = "17"
         source        = "0.0.0.0/0"
         description   = "Allow ntp connection"
