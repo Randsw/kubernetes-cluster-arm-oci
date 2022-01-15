@@ -1,4 +1,4 @@
-! /bin/bash
+#! /bin/bash
 while true; do
    terraform apply --auto-approve
    if [ $? -eq 0 ]; then
