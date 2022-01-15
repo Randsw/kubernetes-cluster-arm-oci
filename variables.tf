@@ -86,7 +86,7 @@ variable "image_id" {
   type = map(string)
   description = "OS Image ID"
   default = {
-    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa4e2ghww37p3owr7pxtz6uirsdljbegjaejgm7vmnjqyumvqg2evq"
+    eu-frankfurt-1 = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa6ueulrtedgclrxznl5pkzhzseddl7b6iq6jhdl3vjm62zhddpxta"
   }
 }
 
