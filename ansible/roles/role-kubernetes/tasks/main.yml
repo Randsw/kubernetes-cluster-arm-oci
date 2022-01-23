@@ -100,3 +100,7 @@
         loop_var: k8s_manifests
          
   when: inventory_hostname in groups['k8s_control_plane']
+
+- name: Execute config reload for systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
